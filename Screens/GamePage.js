@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
-const GamePage = ({route}) => {
+const GamePage = ({navigation, route}) => {
     const { maxRounds, totalTime, prompts } = route.params; // Accessing parameters passed from SettingsPage
   const [timeLeft, setTimeLeft] = useState(totalTime);
   const [team1Score, setTeam1Score] = useState(0);

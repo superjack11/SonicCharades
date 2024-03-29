@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.inorganic.soniccharades"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "assetFonts": [
       "./assets/Viga-Regular.ttf"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6f4d4edd-e812-4ffb-af38-2f9f0cea5dba"
+      }
+    }
   }
 }
