@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, Modal, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, Modal, TouchableOpacity } from 'react-native';
 import CardSwiper from './CardSwiper';
-import prompts from './Prompts.js';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
-const totalTime = 2; // Total time for the timer in seconds (you can change this value)
 
-const GamePage = () => {
+const GamePage = ({route}) => {
+    const { maxRounds, totalTime, prompts } = route.params; // Accessing parameters passed from SettingsPage
   const [timeLeft, setTimeLeft] = useState(totalTime);
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
   const [activeTeam, setActiveTeam] = useState(1);
   const [showStartModal, setShowStartModal] = useState(true);
   const [showEndModal, setShowEndModal] = useState(false);
+  const [showEndGameModal, setShowEndGameModal] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showPauseModal, setShowPauseModal] = useState(false);
+  const [rounds, setRounds] = useState(0); // New state for tracking rounds
+
   const timerAnimation = useRef(new Animated.Value(width)).current;
   const timerRef = useRef(null);
 
@@ -24,9 +26,18 @@ const GamePage = () => {
       setShowStartModal(true);
       setIsTimerRunning(false); // Stop the timer
     } else if (timeLeft === 0) {
-      setShowEndModal(true);
-      timerAnimation.setValue(width); // Reset timer bar width
-      setIsTimerRunning(false); // Stop the timer
+        setIsTimerRunning(false); // Stop the timer
+        setRounds(rounds + 1); // Increment the round count
+    
+        if (rounds + 1 >=  maxRounds * 2) {
+          // If maximum rounds reached, show end-of-game modal
+          setShowStartModal(false);
+          setShowEndModal(false);
+          setShowEndGameModal(true);
+        } else {
+            setShowEndModal(true);
+            timerAnimation.setValue(width); // Reset timer bar width
+        }
     }
   }, [timeLeft, width]);
 
@@ -105,11 +116,42 @@ const GamePage = () => {
     // Implement navigation to the main menu screen
     console.log('Returning to menu');
     navigation.replace('TitlePage');
+  };
 
+  const handlePlayAgain = () => {
+    setShowEndModal(false);
+    setShowEndGameModal(false);
+    setTeam1Score(0);
+    setTeam2Score(0);
+    setActiveTeam(1);
+    setRounds(0); // Reset rounds
+    setTimeLeft(totalTime);
+    setIsTimerRunning(true);
   };
 
   return (
     <View style={styles.container}>
+        <Modal visible={showEndGameModal} transparent>
+            <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                <Text style={styles.modalText}>
+                    End of Game!{' '}
+                    {team1Score > team2Score
+                        ? `Team 1 Wins!`
+                        : team1Score === team2Score
+                        ? 'Tie'
+                        : `Team 2 Wins!`}
+                </Text>          
+                <TouchableOpacity style={styles.startButton} onPress={handlePlayAgain}>
+                    <Text style={styles.startButtonText}>Play Again</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.startButton} onPress={handleReturnToMenu}>
+                    <Text style={styles.startButtonText}>Return to Menu</Text>
+                </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>
+
       <Modal visible={showStartModal} transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -147,6 +189,7 @@ const GamePage = () => {
           </View>
         </View>
       </Modal>
+
 
       <View style={styles.scoresContainer}>
         <View style={[styles.scoreContainer, activeTeam === 1 ? styles.activeTeamView : undefined]}>

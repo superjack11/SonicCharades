@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const TitlePage = ({ navigation }) => {
   const handleStartGame = () => {
-    navigation.replace('GamePage');
+    navigation.replace('SettingsPage');
   };
 
   const handleHowToPlay = () => {
@@ -15,7 +15,7 @@ const TitlePage = ({ navigation }) => {
       <Image source={require('../assets/titleGraphic3.png')} style={styles.image} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleStartGame}>
-          <Text style={styles.buttonText}>Start Game</Text>
+          <Text style={styles.buttonText}>Play</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.howToPlayButton]} onPress={handleHowToPlay}>
           <Text style={[styles.buttonText, styles.howToPlayButtonText]}>How to Play</Text>
