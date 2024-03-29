@@ -1,15 +1,26 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const TitlePage = ({ navigation }) => {
   const handleStartGame = () => {
     navigation.replace('GamePage');
   };
 
+  const handleHowToPlay = () => {
+    // Add navigation logic to navigate to HowToPlayPage
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sonic Charades</Text>
-      <Button title="Start Game" onPress={handleStartGame} />
+      <Image source={require('../assets/titleGraphic3.png')} style={styles.image} />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleStartGame}>
+          <Text style={styles.buttonText}>Start Game</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.howToPlayButton]} onPress={handleHowToPlay}>
+          <Text style={[styles.buttonText, styles.howToPlayButtonText]}>How to Play</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -17,13 +28,39 @@ const TitlePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Align items at the top
     alignItems: 'center',
+    backgroundColor: '#ccf2ff',
+    paddingTop: 50, // Add padding to push content down from the top
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  image: {
+    width: 300, // Adjust the width as needed
+    height: 300, // Adjust the height as needed
     marginBottom: 20,
+  },
+  buttonContainer: {
+    marginTop: 20, // Add spacing between image and buttons
+  },
+  button: {
+    backgroundColor: '#1f93ff',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+    marginBottom: 15,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  howToPlayButton: {
+    backgroundColor: '#ccf2ff', // Light blue background color for How to Play button
+    borderWidth: 2,
+    borderColor: '#1f93ff', // Border color for How to Play button
+  },
+  howToPlayButtonText: {
+    color: '#1f93ff', // Text color for How to Play button
   },
 });
 

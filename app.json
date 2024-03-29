@@ -25,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "assetFonts": [
+      "./assets/Viga-Regular.ttf"
+    ]
   }
 }

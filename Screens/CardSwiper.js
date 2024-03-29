@@ -4,12 +4,27 @@ import SwipeCards from 'react-native-swipe-cards';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-// Define a Card component to render individual cards
-const Card = ({ prompt }) => (
-  <View style={styles.card}>
-    <Text style={styles.promptText}>{prompt}</Text>
-  </View>
-);
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
+const Card = ({ prompt }) => {
+  // Load the 'Viga' font
+  let [fontsLoaded] = useFonts({
+    'Viga': require('../assets/Viga-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  return (
+    <View style={styles.card}>
+        <View style={styles.innerBox}>
+            <Text style={styles.promptText}>{prompt}</Text>
+        </View>
+    </View>
+  );
+};
 
 const CardSwiper = ({ prompts, onSwipeLeft, onSwipeRight }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,14 +54,13 @@ const CardSwiper = ({ prompts, onSwipeLeft, onSwipeRight }) => {
         renderCard={(prompt) => <Card prompt={prompt} />}
         stackSize={1} // Only show one card at a time
         loop={false} // Don't loop when reaching the end of the stack
-        yupText="Correct" // Customize text for swipe right
-        nopeText="Pass" // Customize text for swipe left
+        showNope={false}
+        showYup={false}
         handleYup={handleYup} // Function to call when user swipes right
         handleNope={handleNope} // Function to call when user swipes left
         cardWidth={SCREEN_WIDTH * 0.8} // Set a fixed width for the card
         cardHeight={SCREEN_WIDTH * 0.8 * 1.2} // Set a fixed height for the card (adjust aspect ratio as needed)
         useNativeDriver={false} // Disable native driver to suppress warnings
-        swipeThreshold={0.1} // Set the swipe threshold to 50% of the card's width
       />
     </View>
   );
@@ -66,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     margin: 20,
-    padding: 20,
+    padding: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -76,9 +90,19 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  innerBox: {
+    width: '100%', // Adjust as needed
+    height: '100%', // Adjust as needed
+    borderColor: '#1f93ff',
+    borderWidth: 2, // Border width
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+  },
   promptText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Viga', // Apply 'Viga' font
+    fontSize: 50,
   },
 });
 
